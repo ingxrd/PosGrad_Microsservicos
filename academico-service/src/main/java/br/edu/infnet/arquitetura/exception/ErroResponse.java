@@ -1,42 +1,21 @@
 package br.edu.infnet.arquitetura.exception;
-
 import java.time.LocalDateTime;
 
-public class ErroResponse {
+/*
+ * 1. O que é esta classe?
+ * É um record que padroniza o formato da resposta de erro da API.
+ *
+ * 2. Para que ela serve?
+ * Serve para que todas as respostas de erro da API tenham o mesmo formato:
+ * status, erro, mensagem e dataHora. Sem ele, cada erro retornaria um JSON
+ * diferente (ou o padrão feio do Spring).
+ *
+ * 3. Por que criei ela?
+ * Porque sem um formato padronizado, os clientes da API teriam dificuldade
+ * em interpretar os erros. Com o ErroResponse, todo erro segue o mesmo padrão.
+ */
 
-	private int status;
-	private String erro;
-	private String mensagem;
-	private LocalDateTime dataHora;
 
-	public ErroResponse(int status, String erro, String mensagem, LocalDateTime dataHora) {
-		this.status = status;
-		this.erro = erro;
-		this.mensagem = mensagem;
-		this.dataHora = dataHora;
-	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
-	public String getErro() {
-		return erro;
-	}
-	public void setErro(String erro) {
-		this.erro = erro;
-	}
-	public String getMensagem() {
-		return mensagem;
-	}
-	public void setMensagem(String mensagem) {
-		this.mensagem = mensagem;
-	}
-	public LocalDateTime getDataHora() {
-		return dataHora;
-	}
-	public void setDataHora(LocalDateTime dataHora) {
-		this.dataHora = dataHora;
-	}
+
+public record ErroResponse(int status, String erro, String mensagem, LocalDateTime dataHora) {
 }

@@ -3,6 +3,8 @@ package br.edu.infnet.arquitetura.exception;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+import br.edu.infnet.arquitetura.aluno.AlunoEmailNaoEncontradoException;
+import br.edu.infnet.arquitetura.aluno.AlunoNaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
