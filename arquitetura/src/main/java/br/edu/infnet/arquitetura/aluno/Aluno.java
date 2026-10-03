@@ -21,7 +21,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 @Entity
@@ -36,14 +36,13 @@ public class Aluno {
     private String email;
     @NotBlank(message = "A data de nascimento é obrigatória")
     @Past(message = "A data de nascimento deve estarn o passado")
-    private LocalDateTime dataNascimento;
+    private LocalDate dataNascimento;
     @NotNull
-    private boolean ativo;
+    private Boolean ativo;
 
     public Aluno(){}
 
-    public Aluno(Long id, String nome, String email, LocalDateTime dataNascimento) {
-        this.id = id;
+    public Aluno(String nome, String email, LocalDate dataNascimento) {
         this.nome = nome;
         this.email = email;
         this.dataNascimento = dataNascimento;
@@ -73,19 +72,19 @@ public class Aluno {
         this.email = email;
     }
 
-    public LocalDateTime getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(LocalDateTime dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
-    public boolean isAtivo() {
+    public Boolean isAtivo() {
         return ativo;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 }
