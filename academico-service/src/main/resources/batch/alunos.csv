@@ -1,0 +1,6 @@
+id;nome;email;ativo
+1;Huguinho;huguinho@email.com;true
+2;Zezinho;zezinho@email.com;true
+3;Luizinho;luizinho@email.com;false
+4;  Maria;MARIA@email.com;true
+5;João;JOAO@email.com;true
