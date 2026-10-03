@@ -52,13 +52,13 @@ public class BatchConfig {
                                    PlatformTransactionManager transactionManager,
                                    FlatFileItemReader<AlunoBatch> alunoReader,
                                    AlunoProcessor alunoProcessor,
-                                   FlatFileItemWriter<AlunoBatch> alunoWriter) {
+                                   AlunoApiWriter alunoApiWriter) {
 
         return new StepBuilder("importarAlunosStep", jobRepository)
-                .<AlunoBatch, AlunoBatch>chunk(3, transactionManager)
+                .<AlunoBatch, AlunoRequest>chunk(3, transactionManager)
                 .reader(alunoReader)
                 .processor(alunoProcessor)
-                .writer(alunoWriter)
+                .writer(alunoApiWriter)
                 .build();
     }
 

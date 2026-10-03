@@ -2,6 +2,8 @@ package br.edu.infnet.arquitetura.turma;
 
 import br.edu.infnet.arquitetura.aluno.client.AlunoGateway;
 import br.edu.infnet.arquitetura.aluno.client.AlunoResponse;
+import br.edu.infnet.arquitetura.messaging.MatriculaMessage;
+import br.edu.infnet.arquitetura.messaging.MatriculaProducer;
 import br.edu.infnet.arquitetura.turma.dto.TurmaResponse;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +13,15 @@ import java.util.List;
 public class TurmaService {
 
     private final TurmaRepository turmaRepository;
-    private final AlunoGateway alunoGateway;   // <-- Gateway em vez de Client
+    private final AlunoGateway alunoGateway;
+    private final MatriculaProducer matriculaProducer;
 
-    public TurmaService(TurmaRepository turmaRepository, AlunoGateway alunoGateway) {
+    public TurmaService(TurmaRepository turmaRepository,
+                        AlunoGateway alunoGateway,
+                        MatriculaProducer matriculaProducer) {
         this.turmaRepository = turmaRepository;
         this.alunoGateway = alunoGateway;
+        this.matriculaProducer = matriculaProducer;
     }
 
     public TurmaResponse obterDetalhes(Long id) {
@@ -56,20 +62,21 @@ public class TurmaService {
         turmaRepository.delete(obterEntidadePorId(id));
     }
 
+    // ============ MATRICULAR ALUNO (único método) ============
     public TurmaResponse matricularAluno(Long turmaId, Long alunoId) {
 
         Turma turma = obterEntidadePorId(turmaId);
-
-        // Agora usa o Gateway, que traduz as falhas técnicas
         AlunoResponse aluno = alunoGateway.obterPorId(alunoId);
 
-        if (turma.getAlunoIds().contains(aluno.id())) {
+        if (turma.getAlunoIds().contains(alunoId)) {
             throw new IllegalArgumentException("O aluno já está matriculado nesta turma.");
         }
 
-        turma.adicionarAluno(aluno.id());
-
+        turma.adicionarAluno(alunoId);
         Turma turmaAtualizada = turmaRepository.save(turma);
+
+        // Publica a mensagem na fila do RabbitMQ
+        matriculaProducer.enviar(new MatriculaMessage(turmaId, alunoId));
 
         return converterParaResponse(turmaAtualizada);
     }

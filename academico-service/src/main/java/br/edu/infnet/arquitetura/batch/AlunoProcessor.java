@@ -6,21 +6,19 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AlunoProcessor implements ItemProcessor<AlunoBatch, AlunoBatch> {
-
-    private static final Logger log = LoggerFactory.getLogger(AlunoProcessor.class);
+public class AlunoProcessor implements ItemProcessor<AlunoBatch, AlunoRequest> {
 
     @Override
-    public AlunoBatch process(AlunoBatch aluno) {
+    public AlunoRequest process(AlunoBatch aluno) {
+        if ("false".equalsIgnoreCase(aluno.getAtivo())) {
+            return null;
+        }
 
-        AlunoBatch processado = new AlunoBatch();
-        processado.setId(aluno.getId());
-        processado.setNome(aluno.getNome().trim().toUpperCase());
-        processado.setEmail(aluno.getEmail().trim().toLowerCase());
-        processado.setAtivo(aluno.getAtivo());
-
-        log.info("Processando: {} -> {}", aluno, processado);
-        return processado;
+        return new AlunoRequest(
+                aluno.getNome().trim().toUpperCase(),
+                aluno.getEmail().trim().toLowerCase(),
+                Boolean.parseBoolean(aluno.getAtivo())
+        );
     }
 }
 
